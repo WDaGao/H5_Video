@@ -1,0 +1,211 @@
+<!DOCTYPE html5>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #v2{
+            position: relative;
+            text-align: center;
+        }
+        #v1{
+            position: relative;
+            display: inline-block;
+            margin: 0 auto;
+            width: 855.99px;
+            height: 480.99px;
+            overflow: hidden;
+            z-index: 99;
+        }
+       .ad{
+           position: absolute;
+           top: 18%;
+           left: 37%;
+           display: none;
+       }
+       .btn{
+        position: absolute;
+           top: 40%;
+           left: 45%;
+       }
+       .danmu{
+           text-align: center;
+       }
+       .danmu>div{
+           display: inline-block;
+       }
+       .danmu input[type='text']{
+           float: left;
+           width: 220px;
+           height: 30px;
+           border: 1px solid #ccc;
+           border-top-left-radius: 5px;
+           border-bottom-left-radius: 5px;
+           outline: none;
+           font-size: 14px;
+           text-indent: 1em;
+       }
+       .danmu input[type='button']{
+            float: left;
+            width: 80px;
+            height: 30px;
+            background: #f60;
+            border: none;
+       }
+       .danmu::after{
+           content: " ";
+           overflow: hidden;
+           display: block;
+           clear: both;
+       }
+       .ospan{
+           position: absolute;
+           top: 0px;
+           left: 845px;
+           font-size: 12px;
+           color: red;
+           white-space: nowrap;
+       }
+    </style>
+</head>
+<body>
+    <div id="v2">
+    <div id="v1" contenteditable="true">
+    <video id="v3">
+        <source src="rel/birds.mp4">
+    </video>
+    <!-- <span class="ospan">皮肤开开开</span> -->
+    <img src="rel/11.gif" alt="" class="ad">
+    <a class="btn" href="#"><img src="rel/play.png" alt=""></a>
+    </div>
+</div>
+    <div class="danmu">
+        <div>
+        <input type="text" placeholder="请输入内容">
+        <input type="button" value="发送">
+        </div>
+    </div>
+    <script>
+        // var a =document.getElementById("v2"),
+        //     b =document.getElementById("play"),
+        //     c=document.getElementById("pause");
+        // a.onmousemove=function(){
+        //     b.style.display="block";
+        // }
+        // a.onmouseout=function(){
+        //     b.style.display="none";
+        // }
+        // b.onclick=function(){
+        //     if(b.style.display=="block"){
+        //         c.style.display="block";
+        //         b.style.overflow="1";
+        //     }
+        // }
+        var a=document.getElementById("v2"),
+            v1=document.getElementById("v1"),
+            b=document.getElementById("v3"),
+            c=document.querySelector(".ad"),
+            d=document.querySelector(".btn"),
+            e=document.querySelector(".danmu input[type='text']"),
+            f=document.querySelector(".danmu input[type='button']"),
+            g=document.querySelector("#v2 span");
+            a.onmouseenter=function(){
+                d.style.display="block";
+            }
+            a.onmouseleave=function(e){
+                d.style.display="none";
+            }
+            v1.onkeydown=function(e){
+                if(e.keyCode==32){
+                    play();
+                }
+            }
+            d.onclick=function(e){
+                e.preventDefault();
+                play();
+            }
+            f.onclick=function(){
+                span();
+            }
+           e.onkeydown=function(e){
+                // var value= e.keyCode ;
+                // var key = String.fromCharCode(e.keyCode);
+                // alert(" 键: " + key + "值: " + value ) ;
+                if(e.keyCode==13)
+                span();
+            }
+            function play(){
+                if(v3.paused==true){
+                    v3.play();
+                    d.childNodes[0].src="rel/pause.png";
+                    c.style.display="none";
+                }else{
+                    v3.pause();
+                    d.childNodes[0].src="rel/play.png";
+                    c.style.display="block";
+                }
+            }
+            function span(){
+                if(e.value<=0){
+                    alert("数值不能为空！")
+                    return;
+                }
+                adddom(e.value);
+                e.value="";
+            }
+            function adddom(text){
+                var h=document.createElement("span");
+                h.className='ospan';
+                h.innerText=text;
+                v1.appendChild(h);
+                    addStyle(h,{
+                        color: 'rgb(' + round(0, 256) + ', ' + round(0, 256) + ', ' + round(0, 256) + ')',
+                        fontSize: round(12, 20),
+                        top: round(0, 100),
+                        timing: round(0, 3)
+                    }); 
+            }
+            // function spanStyle(){
+            //     var h=document.querySelectorAll("#v2 span");
+            //     for(var i=0; i<h.length; i++){
+            //         h[i].className="ospan";
+            //         addStyle(h[i],{
+            //             color: 'rgb(' + round(0, 256) + ', ' + round(0, 256) + ', ' + round(0, 256) + ')',
+            //             fontSize: round(12, 20),
+            //             top: round(0, 100),
+            //             timing: round(0, 3)
+            //         }); 
+            //         return;
+            //     }
+            // }
+            function addStyle(dom,object){
+                dom.style.color = object.color;
+                dom.style.fontSize = object.fontSize + 'px';
+                dom.style.top = object.top + 'px';
+                var domWidth = dom.offsetWidth;
+                dom.timer=setInterval(function(){
+                    dom.speed = null;
+                switch(object.timing) {
+                    case 0: 
+                        dom.speed = -2;
+                        break;
+                    case 1:
+                        dom.speed = -3;
+                        break;
+                    case 2:
+                        dom.speed = -4;
+                    }
+                    dom.style.left = dom.offsetLeft + dom.speed + 'px';
+                    if(dom.offsetLeft< (-domWidth)){
+                        clearInterval(dom.timer);
+                        dom.remove();
+                    }
+                },10);
+            }
+            // 生成随机数
+            function round(min,max){
+                return Math.floor(Math.random()*(max-min)+min);
+            }
+    </script>
+</body>
+</html>
